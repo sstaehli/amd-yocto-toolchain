@@ -1,4 +1,4 @@
-# AMD Toolchain
+# AMD Yocto Toolchain
 
 This is a docker image containig AMD Yocto toolchain.
 - The **Dockerfile.Base** installs all necessary packages on a ubuntu image.
