@@ -1,6 +1,7 @@
 build/
 .repo/
 sources/
+setupsdk
 *.lic
 *.tar.gz
 *.tar
