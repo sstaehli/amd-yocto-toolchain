@@ -1,5 +1,6 @@
 build/
 .repo/
+sources/
 *.lic
 *.tar.gz
 *.tar
