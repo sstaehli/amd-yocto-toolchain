@@ -1,0 +1,32 @@
+ARG DISTRO=unknown
+FROM ${DISTRO}
+
+ARG VIVADO_VERSION=unknown
+
+# Install locales package if necessary (depends on the base image)
+RUN apt-get update && apt-get autoremove -y --purge && apt-get install -y \
+   locales
+
+# Generate the desired locale
+RUN locale-gen en_US.UTF-8
+
+# Avoid interactive dialog during package installation
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN \
+        dpkg --add-architecture i386 && \
+        apt-get update && \
+        apt-get install -yq sudo build-essential git nano vim\
+          python3-yaml libncursesw5 libncursesw5:i386 \
+          python-is-python3 python3 man bash diffstat gawk chrpath wget cpio \
+          texinfo lzop apt-utils bc screen libncurses5-dev locales \
+          libc6-dev-i386 doxygen libssl-dev dos2unix xvfb x11-utils \
+          g++-multilib libssl-dev:i386 zlib1g-dev:i386 \
+          libtool libtool-bin procps python3-distutils pigz socat \
+          zstd iproute2 lz4 iputils-ping \
+          curl libtinfo5 net-tools xterm rsync u-boot-tools unzip zip && \
+        rm -rf /var/lib/apt-lists/* && \
+        echo "dash dash/sh boolean false" | debconf-set-selections && \
+        dpkg-reconfigure dash
+
+RUN curl https://storage.googleapis.com/git-repo-downloads/repo > /bin/repo && chmod a+x /bin/repo

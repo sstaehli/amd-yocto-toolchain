@@ -1,0 +1,10 @@
+build/
+.repo/
+*.lic
+*.tar.gz
+*.tar
+*.run
+*.jou
+*.log
+*.str
+settings.json

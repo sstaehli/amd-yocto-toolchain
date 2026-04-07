@@ -1,0 +1,13 @@
+ARG VIVADO_VERSION=unknown
+FROM build/amd-yocto-toolchain:$VIVADO_VERSION-base
+
+# Copy install config file and set the command accordingly
+COPY entrypoint.sh /
+ADD https://github.com/krallin/tini/releases/download/v0.19.0/tini /usr/local/bin/tini
+RUN chmod +x /usr/local/bin/tini
+ENTRYPOINT ["/usr/local/bin/tini", "--", "/entrypoint.sh"]
+CMD ["/bin/bash"]
+
+# USER nonroot
+RUN apt-get update && apt-get autoremove -y --purge && apt-get install -y \
+    gosu

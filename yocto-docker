@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+#REGISTRY=gitlab-registry.airhead.ch/containers/toolchains
+REGISTRY=build
+
+# Run the AMD Yocto Docker container
+docker run -it \
+    -e HOST_UID=$(id -u) \
+    -e HOST_GID=$(id -g) \
+    -v $(pwd):/workspace \
+    -w /workspace \
+    --rm \
+    $REGISTRY/amd-yocto-toolchain:2025.2 \
+    bash -lc \
+        'groupadd -g "$HOST_GID" hostgroup; useradd -m -u "$HOST_UID" -g "$HOST_GID" hostuser; \
+            gosu hostuser bash -lc \
+                "git config --global user.name \"Jane Doe\" &&
+                git config --global user.email \"yocto@acme.com\" &&
+                git config --global --add safe.directory /workspace &&
+                git config --global color.ui always &&
+                repo init -u \"https://github.com/Xilinx/yocto-manifests.git\" -b \"rel-v2025.2\" &&
+                repo sync -j1 --fail-fast"; \
+            exec gosu hostuser bash -li'
